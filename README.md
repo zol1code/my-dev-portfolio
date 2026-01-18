@@ -14,11 +14,15 @@ Tech Stack
 - **Backend:** Python (Flask/Django), SQL.
 - **Tools:** Git, GitHub, Technical Troubleshooting, API Integration.
 
-The Project
-This specific project is a **Fullstack Support Dashboard** (in progress) designed to demonstrate:
-1. **Frontend Skills:** Using React hooks and state management.
-2. **API Consumption:** Fetching and displaying real-time data from GitHub and custom backends.
-3. **Problem Solving:** Built with a focus on UI/UX for technical support workflows.
+Featured Project: IT Support Console
+This is a responsive web application designed for IT Support teams to monitor system health and manage incident tickets.
+
+**Key Technical Features:**
+- **Reactive UI:** Built with React.js using Functional Components and Hooks (`useState`) for real-time ticket resolution.
+- **Responsive Design:** Implemented with Tailwind CSS to ensure seamless performance on both desktop and mobile devices.
+- **Support Workflow:** Includes logic for ticket prioritization (SLA) and system status monitoring.
+- **Mobile-First Dev:** Developed entirely on iOS using cloud-based IDEs to prove adaptability.
+
 
 Contact Me
 I am actively looking for **Internships, Junior Developer, or Tech Support** roles in Ireland.
