@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Dev Portfolio</title>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+    <div id="root"></div>
+
+    <script type="text/babel">
+        function App() {
+            const [user, setUser] = React.useState(null);
+
+            React.useEffect(() => {
+                fetch('https://api.github.com/users/SEU_USUARIO_AQUI')
+                    .then(res => res.json())
+                    .then(data => setUser(data));
+            }, []);
+
+            return (
+                <div class="flex flex-col items-center justify-center min-h-screen">
+                    <div class="bg-white p-8 rounded-lg shadow-xl text-center">
+                        <h1 class="text-2xl font-bold mb-4">Tech Support & Dev Portfolio </h1>
+                        {user && (
+                            <div>
+                                <img src={user.avatar_url} class="w-32 h-32 rounded-full mx-auto mb-4" />
+                                <p class="text-xl">{user.name}</p>
+                                <p class="text-gray-600">Based in Cork | CS Student</p>
+                            </div>
+                        )}
+                        <div class="mt-6 space-y-2">
+                            <p class="bg-blue-100 p-2 rounded">Skills: Python, React, JS</p>
+                            <p class="bg-green-100 p-2 rounded">Visa: Stamp 2 (Work Permit Seek)</p>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>
