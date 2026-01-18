@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zoli Code | IT Support Dashboard</title>
+    <title>Zoli Code by Thaina Pereira| IT Support Dashboard</title>
     <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
@@ -14,13 +14,23 @@
     <div id="root"></div>
 
     <script type="text/babel">
-        function App() {
-            // Simulação de dados de suporte
-            const [tickets] = React.useState([
+                function App() {
+            // Agora usamos 'useState' para que a lista possa ser alterada
+            const [tickets, setTickets] = React.useState([
                 { id: "001", user: "John Doe", issue: "VPN Connection Failed", priority: "High", status: "Open" },
                 { id: "002", user: "Sarah Smith", issue: "Software License Expired", priority: "Medium", status: "In Progress" },
                 { id: "003", user: "Mike Ross", issue: "Hardware Upgrade - RAM", priority: "Low", status: "Completed" }
             ]);
+
+            // Função para resolver (remover) o ticket
+            const resolveTicket = (id) => {
+                // Filtramos a lista mantendo apenas os IDs diferentes do que clicamos
+                const updatedTickets = tickets.filter(t => t.id !== id);
+                setTickets(updatedTickets);
+                
+                // Feedback visual simples
+                alert(`Ticket #${id} resolved and archived!`);
+            };
 
             const systems = [
                 { name: "Internal Server", status: "Online", icon: "fa-server", color: "text-green-400" },
@@ -30,11 +40,10 @@
 
             return (
                 <div class="min-h-screen p-4 md:p-8">
-                    {/* Header */}
                     <header class="flex justify-between items-center mb-8 border-b border-slate-700 pb-4">
                         <div>
                             <h1 class="text-2xl font-bold text-blue-400">Zoli Code Solutions</h1>
-                            <p class="text-sm text-slate-400 font-mono">IT Support Management Console v1.0</p>
+                            <p class="text-sm text-slate-400 font-mono">IT Support Console v1.1</p>
                         </div>
                         <div class="text-right">
                             <span class="block text-sm font-bold">Cork, Ireland</span>
@@ -42,10 +51,9 @@
                         </div>
                     </header>
 
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                        {/* System Status Cards */}
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
                         {systems.map(sys => (
-                            <div class="bg-slate-800 p-4 rounded-xl border border-slate-700">
+                            <div key={sys.name} class="bg-slate-800 p-4 rounded-xl border border-slate-700">
                                 <div class="flex items-center space-x-4">
                                     <i class={`fas ${sys.icon} text-2xl ${sys.color}`}></i>
                                     <div>
@@ -57,65 +65,62 @@
                         ))}
                     </div>
 
-                    {/* Ticket Table */}
-                    <div class="mt-8 bg-slate-800 rounded-xl border border-slate-700 overflow-hidden">
-                        <div class="p-4 border-b border-slate-700 bg-slate-700/50">
-                            <h2 class="font-bold italic"><i class="fas fa-ticket-alt mr-2"></i>Active Support Tickets</h2>
+                    <div class="bg-slate-800 rounded-xl border border-slate-700 overflow-hidden">
+                        <div class="p-4 border-b border-slate-700 bg-slate-700/50 flex justify-between items-center">
+                            <h2 class="font-bold italic"><i class="fas fa-ticket-alt mr-2"></i>Active Support Tickets ({tickets.length})</h2>
                         </div>
                         <div class="overflow-x-auto">
                             <table class="w-full text-left">
                                 <thead class="text-xs uppercase bg-slate-900/50 text-slate-400">
                                     <tr>
                                         <th class="p-4">ID</th>
-                                        <th class="p-4">User</th>
                                         <th class="p-4">Issue</th>
                                         <th class="p-4">Priority</th>
-                                        <th class="p-4">Status</th>
+                                        <th class="p-4">Action</th>
                                     </tr>
                                 </thead>
                                 <tbody class="divide-y divide-slate-700">
-                                    {tickets.map(ticket => (
-                                        <tr class="hover:bg-slate-700/30 transition-colors">
-                                            <td class="p-4 font-mono text-blue-400">#{ticket.id}</td>
-                                            <td class="p-4">{ticket.user}</td>
-                                            <td class="p-4">{ticket.issue}</td>
-                                            <td class="p-4">
-                                                <span class={`text-xs px-2 py-1 rounded ${
-                                                    ticket.priority === 'High' ? 'bg-red-500/20 text-red-400' : 'bg-blue-500/20 text-blue-400'
-                                                }`}>
-                                                    {ticket.priority}
-                                                </span>
-                                            </td>
-                                            <td class="p-4 text-sm text-slate-300">{ticket.status}</td>
-                                        </tr>
-                                    ))}
+                                    {tickets.length === 0 ? (
+                                        <tr><td colspan="4" class="p-8 text-center text-slate-500 italic">All tickets resolved. Great job!</td></tr>
+                                    ) : (
+                                        tickets.map(ticket => (
+                                            <tr key={ticket.id} class="hover:bg-slate-700/30 transition-colors">
+                                                <td class="p-4 font-mono text-blue-400">#{ticket.id}</td>
+                                                <td class="p-4">
+                                                    <p class="font-bold">{ticket.issue}</p>
+                                                    <p class="text-xs text-slate-400 italic">User: {ticket.user}</p>
+                                                </td>
+                                                <td class="p-4">
+                                                    <span class={`text-xs px-2 py-1 rounded ${
+                                                        ticket.priority === 'High' ? 'bg-red-500/20 text-red-400' : 'bg-blue-500/20 text-blue-400'
+                                                    }`}>
+                                                        {ticket.priority}
+                                                    </span>
+                                                </td>
+                                                <td class="p-4">
+                                                    <button 
+                                                        onClick={() => resolveTicket(ticket.id)}
+                                                        class="bg-green-600 hover:bg-green-500 text-white text-xs px-3 py-1 rounded transition-colors"
+                                                    >
+                                                        <i class="fas fa-check mr-1"></i> Resolve
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        ))
+                                    )}
                                 </tbody>
                             </table>
                         </div>
                     </div>
 
-                    {/* Footer / Skills Proof */}
-                    <footer class="mt-8 grid grid-cols-1 md:grid-cols-2 gap-4 text-sm bg-blue-900/10 p-4 rounded-lg border border-blue-500/30">
-                        <div>
-                            <p class="font-bold text-blue-400 mb-2 underline">Technical Competencies Demonstrated:</p>
-                            <ul class="list-disc list-inside space-y-1 text-slate-300">
-                                <li>React Component Architecture & State Management</li>
-                                <li>Dynamic UI Rendering with Tailwind CSS</li>
-                                <li>Troubleshooting & Incident Management Logic</li>
-                                <li>Network & System Monitoring Visualization</li>
-                            </ul>
-                        </div>
-                        <div class="flex flex-col justify-center items-end text-slate-400 italic">
-                            <p>Developed by Zoli Code (Thaina Pereira)</p>
-                            <p>Final Year CS Student - Cork</p>
-                        </div>
+                    <footer class="mt-8 text-center text-slate-500 text-sm">
+                        <p>Zoli Code © 2026 | Built with React & Tailwind CSS</p>
+                        <p class="mt-2 italic">Demonstrating State Management & Event Handling</p>
                     </footer>
                 </div>
             );
         }
 
-        const root = ReactDOM.createRoot(document.getElementById('root'));
-        root.render(<App />);
     </script>
 </body>
 </html>
