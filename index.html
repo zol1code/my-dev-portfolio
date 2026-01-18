@@ -10,117 +10,145 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
-<body class="bg-slate-900 text-slate-100">
+<body class="bg-slate-900 text-slate-100 font-sans">
     <div id="root"></div>
 
     <script type="text/babel">
-                function App() {
-            // Agora usamos 'useState' para que a lista possa ser alterada
-            const [tickets, setTickets] = React.useState([
-                { id: "001", user: "John Doe", issue: "VPN Connection Failed", priority: "High", status: "Open" },
-                { id: "002", user: "Sarah Smith", issue: "Software License Expired", priority: "Medium", status: "In Progress" },
-                { id: "003", user: "Mike Ross", issue: "Hardware Upgrade - RAM", priority: "Low", status: "Completed" }
+        const { useState } = React;
+
+        function App() {
+            // Estado para gerenciar os chamados de suporte
+            const [tickets, setTickets] = useState([
+                { id: "101", user: "Apple Office Cork", issue: "Network Latency in Block A", priority: "High", time: "10m ago" },
+                { id: "102", user: "Zoli Code Client", issue: "Database Migration", priority: "Medium", time: "1h ago" },
+                { id: "103", user: "Remote Worker", issue: "VPN Configuration", priority: "Low", time: "3h ago" }
             ]);
 
-            // Função para resolver (remover) o ticket
-            const resolveTicket = (id) => {
-                // Filtramos a lista mantendo apenas os IDs diferentes do que clicamos
-                const updatedTickets = tickets.filter(t => t.id !== id);
-                setTickets(updatedTickets);
-                
-                // Feedback visual simples
-                alert(`Ticket #${id} resolved and archived!`);
+            // Função para "Resolver" o chamado (Remove da lista)
+            const handleResolve = (id) => {
+                const filtered = tickets.filter(ticket => ticket.id !== id);
+                setTickets(filtered);
             };
 
+            // Dados estáticos para o monitoramento de sistemas
             const systems = [
-                { name: "Internal Server", status: "Online", icon: "fa-server", color: "text-green-400" },
-                { name: "Company Network", status: "Stable", icon: "fa-wifi", color: "text-green-400" },
-                { name: "Cloud Backup", status: "Warning", icon: "fa-cloud", color: "text-yellow-400" }
+                { name: "Server Status", status: "Online", icon: "fa-server", color: "text-green-400" },
+                { name: "Global VPN", status: "Active", icon: "fa-shield-halved", color: "text-blue-400" },
+                { name: "Cloud Sync", status: "Stable", icon: "fa-cloud", color: "text-green-400" }
             ];
 
             return (
-                <div class="min-h-screen p-4 md:p-8">
-                    <header class="flex justify-between items-center mb-8 border-b border-slate-700 pb-4">
+                <div class="max-w-4xl mx-auto min-h-screen p-4">
+                    {/* Cabeçalho Profissional */}
+                    <header class="flex justify-between items-start mb-8 border-b border-slate-800 pb-6 mt-4">
                         <div>
-                            <h1 class="text-2xl font-bold text-blue-400">Zoli Code Solutions</h1>
-                            <p class="text-sm text-slate-400 font-mono">IT Support Console v1.1</p>
+                            <h1 class="text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-emerald-400">
+                                Zoli Code
+                            </h1>
+                            <p class="text-slate-400 text-xs font-mono tracking-widest uppercase">IT Solutions & Support</p>
                         </div>
-                        <div class="text-right">
-                            <span class="block text-sm font-bold">Cork, Ireland</span>
-                            <span class="text-xs bg-blue-500/20 text-blue-400 px-2 py-1 rounded">Stamp 2 Holder</span>
+                        <div class="text-right flex flex-col items-end">
+                            <span class="bg-blue-600/20 text-blue-400 text-[10px] font-bold px-2 py-1 rounded-full mb-1">
+                                CORK, IE | STAMP 2
+                            </span>
+                            <p class="text-[10px] text-slate-500">Final Year CS Student Portfolio</p>
                         </div>
                     </header>
 
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                        {systems.map(sys => (
-                            <div key={sys.name} class="bg-slate-800 p-4 rounded-xl border border-slate-700">
-                                <div class="flex items-center space-x-4">
-                                    <i class={`fas ${sys.icon} text-2xl ${sys.color}`}></i>
+                    {/* Cards de Monitoramento */}
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+                        {systems.map((sys) => (
+                            <div key={sys.name} class="bg-slate-800/50 border border-slate-700 p-4 rounded-2xl">
+                                <div class="flex items-center space-x-3">
+                                    <div class={`p-2 rounded-lg bg-slate-900 ${sys.color}`}>
+                                        <i class={`fas ${sys.icon}`}></i>
+                                    </div>
                                     <div>
-                                        <p class="text-slate-400 text-sm">{sys.name}</p>
-                                        <p class="font-bold">{sys.status}</p>
+                                        <p class="text-slate-500 text-xs uppercase font-bold tracking-tighter">{sys.name}</p>
+                                        <p class="text-sm font-semibold">{sys.status}</p>
                                     </div>
                                 </div>
                             </div>
                         ))}
                     </div>
 
-                    <div class="bg-slate-800 rounded-xl border border-slate-700 overflow-hidden">
-                        <div class="p-4 border-b border-slate-700 bg-slate-700/50 flex justify-between items-center">
-                            <h2 class="font-bold italic"><i class="fas fa-ticket-alt mr-2"></i>Active Support Tickets ({tickets.length})</h2>
+                    {/* Seção de Tickets */}
+                    <div class="bg-slate-800 border border-slate-700 rounded-2xl shadow-2xl overflow-hidden">
+                        <div class="p-5 border-b border-slate-700 flex justify-between items-center bg-slate-800/50">
+                            <h2 class="text-lg font-bold">Active Support Tickets</h2>
+                            <span class="bg-slate-700 text-slate-300 text-xs px-2 py-1 rounded-md">
+                                {tickets.length} Pending
+                            </span>
                         </div>
+
                         <div class="overflow-x-auto">
                             <table class="w-full text-left">
-                                <thead class="text-xs uppercase bg-slate-900/50 text-slate-400">
+                                <thead class="bg-slate-900/50 text-slate-500 text-[10px] uppercase font-bold">
                                     <tr>
-                                        <th class="p-4">ID</th>
-                                        <th class="p-4">Issue</th>
-                                        <th class="p-4">Priority</th>
-                                        <th class="p-4">Action</th>
+                                        <th class="p-4">Ticket</th>
+                                        <th class="p-4 text-center">Priority</th>
+                                        <th class="p-4 text-right">Action</th>
                                     </tr>
                                 </thead>
                                 <tbody class="divide-y divide-slate-700">
-                                    {tickets.length === 0 ? (
-                                        <tr><td colspan="4" class="p-8 text-center text-slate-500 italic">All tickets resolved. Great job!</td></tr>
-                                    ) : (
-                                        tickets.map(ticket => (
-                                            <tr key={ticket.id} class="hover:bg-slate-700/30 transition-colors">
-                                                <td class="p-4 font-mono text-blue-400">#{ticket.id}</td>
+                                    {tickets.length > 0 ? (
+                                        tickets.map((t) => (
+                                            <tr key={t.id} class="hover:bg-slate-700/20 transition-all">
                                                 <td class="p-4">
-                                                    <p class="font-bold">{ticket.issue}</p>
-                                                    <p class="text-xs text-slate-400 italic">User: {ticket.user}</p>
+                                                    <p class="text-sm font-bold text-slate-200">{t.issue}</p>
+                                                    <p class="text-[10px] text-slate-500">{t.user} • {t.time}</p>
                                                 </td>
-                                                <td class="p-4">
-                                                    <span class={`text-xs px-2 py-1 rounded ${
-                                                        ticket.priority === 'High' ? 'bg-red-500/20 text-red-400' : 'bg-blue-500/20 text-blue-400'
+                                                <td class="p-4 text-center">
+                                                    <span class={`text-[10px] px-2 py-1 rounded-full font-bold ${
+                                                        t.priority === 'High' ? 'bg-red-500/10 text-red-400' : 'bg-blue-500/10 text-blue-400'
                                                     }`}>
-                                                        {ticket.priority}
+                                                        {t.priority}
                                                     </span>
                                                 </td>
-                                                <td class="p-4">
+                                                <td class="p-4 text-right">
                                                     <button 
-                                                        onClick={() => resolveTicket(ticket.id)}
-                                                        class="bg-green-600 hover:bg-green-500 text-white text-xs px-3 py-1 rounded transition-colors"
+                                                        onClick={() => handleResolve(t.id)}
+                                                        class="bg-emerald-600 hover:bg-emerald-500 text-white text-[10px] font-bold px-3 py-1.5 rounded-lg transition-all"
                                                     >
-                                                        <i class="fas fa-check mr-1"></i> Resolve
+                                                        RESOLVE
                                                     </button>
                                                 </td>
                                             </tr>
                                         ))
+                                    ) : (
+                                        <tr>
+                                            <td colspan="3" class="p-10 text-center">
+                                                <i class="fas fa-circle-check text-emerald-400 text-3xl mb-3 block"></i>
+                                                <p class="text-slate-400 text-sm italic font-serif">Queue cleared. System stable.</p>
+                                            </td>
+                                        </tr>
                                     )}
                                 </tbody>
                             </table>
                         </div>
                     </div>
 
-                    <footer class="mt-8 text-center text-slate-500 text-sm">
-                        <p>Zoli Code © 2026 | Built with React & Tailwind CSS</p>
-                        <p class="mt-2 italic">Demonstrating State Management & Event Handling</p>
+                    {/* Skills Proof Footer */}
+                    <div class="mt-8 p-4 bg-blue-500/5 border border-blue-500/20 rounded-xl">
+                        <p class="text-[11px] text-blue-400 font-bold uppercase mb-2 tracking-widest">Verification Label</p>
+                        <div class="flex flex-wrap gap-2 text-[10px]">
+                            <span class="bg-slate-700 px-2 py-1 rounded">React Hooks (useState)</span>
+                            <span class="bg-slate-700 px-2 py-1 rounded">JavaScript ES6 (filter)</span>
+                            <span class="bg-slate-700 px-2 py-1 rounded">Tailwind Responsive UI</span>
+                            <span class="bg-slate-700 px-2 py-1 rounded">IT Support Logic</span>
+                        </div>
+                    </div>
+
+                    <footer class="mt-8 pb-8 text-center border-t border-slate-800 pt-6">
+                        <p class="text-slate-500 text-xs">Developed by <strong>Zoli Code</strong> via Mobile IDE</p>
+                        <p class="text-[10px] text-slate-600 mt-1">Cork, Ireland &copy; 2026</p>
                     </footer>
                 </div>
             );
         }
 
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
     </script>
 </body>
 </html>
